@@ -6,7 +6,8 @@ Final project for the course - CS 6315: Semantic Web, Spring 2018<br>
 - Krupali Patel
 - Shivdev Kumar
 
-**Demo**: Dempnstration of the project can be found <a href="https://utdallas.app.box.com/file/289076411668">here</a>.
+**Demo**: Dempnstration of the project can be found <a href="https://youtu.be/MIHdjxrGKTQ">here</a>.
+
 
 <hr>
 
