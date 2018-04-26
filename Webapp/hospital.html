@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Hospital Dataset Analysis</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+    <!--Navigation Bar-->
+
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+            <div class="container">
+              <!-- brand or logo -->
+              <a href="index.html" class="navbar-brand">Semantic Web Project</a>
+              <!-- Collapse button for small screens -->
+              <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <!-- an icon for toggler -->
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <!-- Id should match with the data-target -->
+              <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="nchs.html" class="nav-link">NCHS</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="hospital.html" class="nav-link">Hospital</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="city.html" class="nav-link">HospitalFinder</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+    </nav>
+
+    <div class="container mb-5">
+      <font face="calibri">
+        <br>
+        <br>
+        <h1 style="text-align:center; color:red" class="mt-3">State-wise Distribution Of Hospitals</h1>
+         <h4 style="text-align:center;" class="mb-3"><em>Motivation : Mismatch between count of death and no of hospitals </em></h4>
+        <div id="geochart_material" style="width: 1300px; height: 800px;"></div> 
+        <h1 style="text-align:center; color:red" class="mt-3">Hospitals in the Selected State</h1> 
+        <div id="map_material" style="width: 100%; height: 800px;"></div>  
+      </font>
+   </div>
+
+ <section id="footer-main" class="bg-dark">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <h6>Team Members</h6>
+              <p>Ankita Patil, Krupali Patel, Shivdev Kumar</p>
+            </div>
+            
+            <div class="col-md-6">
+                <h6>Semantic Web Project</h6>
+                <p>Spring 2018</p>
+                <p>The University of Texas at Dallas</p>
+            </div>
+          </div>
+        </div>
+    </section>
+
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>   
+
+      <script type="text/javascript">
+
+
+          // Load the Visualization API and the corechart package.
+          google.charts.load('current', {'packages':['corechart','geoChart','map'],'mapsApiKey': 'AIzaSyCxwxvx1Nx92B8pZsejsJx9cp61Y0uiwIM','callback':drawChart});
+
+          // Set a callback to run when the Google Visualization API is loaded.
+          google.charts.setOnLoadCallback(drawChart);
+            window.onload =function() {
+              drawChart();
+            }
+
+            function drawChart() {
+              drawGeoChart();
+            }
+
+        function drawGeoChart() {
+
+          var url = 'http://localhost:3030/myDataset/query';
+          var query = "prefix raw:<https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_BASE_URI#/source///dataset/root/vocab/raw/> SELECT  ?state (COUNT (?state) as ?no_of_hospitals) WHERE { GRAPH <http://localhost:3030/myDataset/data/hospital>  { ?s raw:state ?state . } } GROUP BY ?state order by desc(?no_of_hospitals)"    //AJAX code
+            $.ajax({
+                  async: true,
+                  global: false,
+                  url: encodeURI(url),
+                  type: 'POST',
+                  data: { query : query },
+                  crossDomain: true,
+                  dataType: 'jsonp',
+                  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                  success: function (data) {
+                    
+                      // create new data 
+                       var table_data = new google.visualization.DataTable();
+                        table_data.addColumn('string', 'state');
+                        table_data.addColumn('number', 'no_of_hospitals');
+                      
+                        var rows=data.results.bindings.length;
+                        //alert('rows' + rows);
+                        for (var i = 0; i < rows; i++ )
+                        {
+                            var state = "US-" + data.results.bindings[i].state.value;
+                            var no_of_hospitals = data.results.bindings[i].no_of_hospitals.value;
+                            table_data.addRow([state,Number(no_of_hospitals)]);
+                        }
+
+                        //Drawing a BarChart
+                        var options = {};
+                          options['region'] = 'US';
+                          options['dataMode'] = 'regions';
+                          options['resolution'] = 'provinces';
+                          options['enableRegionInteractivity']=true;
+                          //options['colors']='#009FDB';
+                          
+                        var geoChart = new google.visualization.GeoChart(document.getElementById('geochart_material'));
+                            geoChart.draw(table_data, options);
+                  //google.visualization.events.addListener(geoChart, 'ready', function(){
+
+                        google.visualization.events.addListener(geoChart,'regionClick', (e)=>{
+                      //console.log('qwerty',e.region)
+                        displayHospitalBasedOnState(e);
+                    });
+                },
+                  error: function (data) {
+                    console.log(JSON.stringify(data));
+                  }
+                });
+      
+        } // End of drawGeoChart
+
+        function displayHospitalBasedOnState(e){
+          var state = e.region.split("-")[1]
+          var url = 'http://localhost:3030/myDataset/query';
+          var query = `prefix raw:<https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_BASE_URI#/source///dataset/root/vocab/raw/> SELECT  ?latitude ?longitude ?hospital_name WHERE { GRAPH <http://localhost:3030/myDataset/data/hospital> { ?subject raw:state \"${state}\". ?subject raw:hospital_name ?hospital_name .?subject raw:city ?city .?subject raw:latitude ?latitude .?subject raw:longitude ?longitude . FILTER (?latitude != '') FILTER (?longitude != '')}}`
+          $.ajax({
+              async: true,
+              global: false,
+              url: encodeURI(url),
+              type: 'POST',
+              data: { query : query },
+              crossDomain: true,
+              dataType: 'jsonp',
+              contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+              success: function (data) {
+                    
+                      // create new data 
+                  var table_data = new google.visualization.DataTable();
+                  
+                  //table_data.addColumn('string', 'city');
+                  table_data.addColumn('number','latitude');
+                  table_data.addColumn('number','longitude');
+                  table_data.addColumn('string', 'hospital_name');
+                
+                  var rows=data.results.bindings.length;
+                  console.log(data.results.bindings[0])
+                  //alert('rows' + rows);
+                  for (var i = 0; i < rows; i++ )
+                  {
+                      
+                      //var city =  data.results.bindings[i].city.value;
+                      var latitude =  data.results.bindings[i].latitude.value;
+                      var longitude =  data.results.bindings[i].longitude.value;
+                      var hospital_name =  data.results.bindings[i].hospital_name.value;
+
+                      table_data.addRow([parseFloat(latitude),parseFloat(longitude),hospital_name]);
+                  }
+
+                   //console.log("data dtsdsdfghgjgjhfgdfsdfdghcnfgds......",table_data);
+                   
+            
+                var options = {
+                              icons: {
+                                default: {
+                                  normal: 'https://icons.iconarchive.com/icons/icons-land/vista-map-markers/48/Map-Marker-Ball-Azure-icon.png',
+                                  selected: 'https://icons.iconarchive.com/icons/icons-land/vista-map-markers/48/Map-Marker-Ball-Right-Azure-icon.png'
+                                }
+                              },
+                              dataMode:'markers',
+                              showTooltip: true,
+                              showInfoWindow: true
+                            };  
+                
+                  var stateMap = new google.visualization.Map(document.getElementById('map_material'));
+                  stateMap.draw(table_data, options);
+          
+                  google.visualization.events.addOneTimeListener(stateMap,'select', (e)=>{
+                    console.log('qwerty',stateMap.getSelection()[0])
+                
+                  });
+              },
+              error: function (data) {
+                console.log(JSON.stringify(data));
+              }
+            });
+      
+        }
+
+        
+        </script>
+
+</body>
+
+
+  

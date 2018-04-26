@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Incident Analysis</title>
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <!--<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+        <div class="container">
+          <!-- brand or logo -->
+          <a href="index.html" class="navbar-brand">Semantic Web Project</a>
+          <!-- Collapse button for small screens -->
+          <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+             <!-- an icon for toggler -->
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <!-- Id should match with the data-target -->
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a href="index.html" class="nav-link">Home</a>
+              </li>
+              <li class="nav-item">
+                <a href="nchs.html" class="nav-link">NCHS</a>
+              </li>
+              <li class="nav-item">
+                <a href="hospital.html" class="nav-link">Hospital</a>
+              </li>
+              <li class="nav-item">
+                <a href="city.html" class="nav-link">HospitalFinder</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+</nav>
+
+<div class="container mb-5">
+  <font face="calibri"> 
+	  <div id="barchart_material" style="width: 100%; height: 800px;"></div>
+     <div id="piechart_material" style="width: 100%; height: 800px;"></div>   	 
+   </font>
+</div>
+
+ <section id="footer-main" class="bg-dark">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <h6>Team Members</h6>
+              <p>Ankita Patil, Krupali Patel, Shivdev Kumar</p>
+            </div>
+            
+            <div class="col-md-6">
+                <h6>Semantic Web Project</h6>
+                <p>Spring 2018</p>
+                <p>The University of Texas at Dallas</p>
+            </div>
+          </div>
+        </div>
+    </section>
+
+<script type="text/javascript"
+          src="https://www.google.com/jsapi?autoload={
+            'modules':[{
+              'name':'visualization',
+              'version':'1',
+              'packages':['corechart']
+            }]
+          }"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
+  <script type="text/javascript">
+    window.onload =function() {
+      drawChart();
+    }
+      function drawChart() {
+        drawBarChart();
+        drawPieChart()
+      }
+
+     function drawBarChart() {
+
+      var url = 'http://localhost:3030/myDataset/query';
+	    var query = "prefix raw:<https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_BASE_URI#/source///dataset/root/vocab/raw/> SELECT ?cause_of_death (COUNT(?cause_of_death) as ?death_count) WHERE { GRAPH <http://localhost:3030/myDataset/data/nchs>  { ?subject raw:cause_of_death ?cause_of_death . ?subject raw:percent_potentially_excess_deaths ?death. FILTER (?death >= '50%') }} GROUP BY ?cause_of_death"
+    //AJAX code
+		 $.ajax({
+					async: false,
+					global: false,
+					url: encodeURI(url),
+					type: 'POST',
+					data: { query : query },
+          crossDomain: true,
+          dataType: 'jsonp',
+					contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+					success: function (data) {
+						
+              // create new data 
+                var table_data = new google.visualization.DataTable();
+                table_data.addColumn('string', 'cause_of_death');
+                table_data.addColumn('number', 'death_count');
+                  
+                var bindings = data.results.bindings; 
+                var high_conf=0;
+                for (var i in bindings) {
+                    var our_data = data.results.bindings[i];  
+                    var  xData = our_data.cause_of_death.value;   
+                    var yData=  parseInt(our_data.death_count.value);
+                    console.log(xData,yData);
+
+                    var all = [xData,yData];
+                    table_data.addRow(all);
+                }
+                //Drawing a BarChart
+                var barOptions = { 
+                    title: 'Top Five Causes Of Death For The Year 2014' ,
+                    titleTextStyle : {color : 'red', fontSize: '35',fontName:'Calibri',bold:false},
+                    colors: ['#009FDB']
+                };
+            
+                var barChart = new google.visualization.BarChart(document.getElementById('barchart_material'));
+                barChart.draw(table_data, barOptions);
+                      
+					},
+					error: function (data) {
+						console.log(JSON.stringify(data));
+					}
+				});
+	 
+    }
+
+    function drawPieChart() {
+
+      var url = 'http://localhost:3030/myDataset/query';
+	    var query = "prefix raw:<https://github.com/timrdf/csv2rdf4lod-automation/wiki/CSV2RDF4LOD_BASE_URI#/source///dataset/root/vocab/raw/> SELECT ?state (count(?cause_of_death) as ?count_cause_of_death) WHERE { GRAPH <http://localhost:3030/myDataset/data/nchs> { ?subject raw:cause_of_death ?cause_of_death . ?subject raw:percent_potentially_excess_deaths ?death. ?subject raw:state ?state FILTER (?death >= '50%')}} GROUP BY ?state"
+    //AJAX code
+		 $.ajax({
+					async: false,
+					global: false,
+					url: encodeURI(url),
+					type: 'POST',
+					data: { query : query },
+          crossDomain: true,
+          dataType: 'jsonp',
+					contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+					success: function (data) {
+						
+              // create new data 
+                var table_data = new google.visualization.DataTable();
+                table_data.addColumn('string', 'state');
+                table_data.addColumn('number', 'count_cause_of_death');
+                  
+                var bindings = data.results.bindings; 
+                var high_conf=0;
+                for (var i in bindings) {
+                    var our_data = data.results.bindings[i];  
+                    var  xData = our_data.state.value;   
+                    var yData=  parseInt(our_data.count_cause_of_death.value);
+                    console.log(xData,yData);
+
+                    var all = [xData,yData];
+                    table_data.addRow(all);
+                }
+                //Drawing a BarChart
+                var barOptions = { 
+                    title: 'State-wise Count Of Deaths For The Year 2014' ,
+                    titleTextStyle : {color : 'red', fontSize: '35',fontName:'Calibri',bold:false},
+                    is3D : true 
+                };
+            
+                var barChart = new google.visualization.PieChart(document.getElementById('piechart_material'));
+                barChart.draw(table_data, barOptions);
+                      
+					},
+					error: function (data) {
+						console.log(JSON.stringify(data));
+					}
+				});
+	 
+    }
+    </script>
+</body>
+</html>

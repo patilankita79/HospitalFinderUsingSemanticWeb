@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Semantic Web Project</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="nav-main">
+   
+
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#home">Home <span class="sr-only">(current)</span></a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#datasets">Datasets</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#nchs">NCHS</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Hospital</a>
+        </li>
+      </ul>
+      
+
+</nav> -->
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+        <div class="container">
+          <!-- brand or logo -->
+          <a href="index.html" class="navbar-brand">Semantic Web Project</a>
+          <!-- Collapse button for small screens -->
+          <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+             <!-- an icon for toggler -->
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <!-- Id should match with the data-target -->
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a href="index.html" class="nav-link">Home</a>
+              </li>
+              <li class="nav-item">
+                <a href="nchs.html" class="nav-link">NCHS</a>
+              </li>
+              <li class="nav-item">
+                <a href="hospital.html" class="nav-link">Hospital</a>
+              </li>
+              <li class="nav-item">
+                <a href="city.html" class="nav-link">HospitalFinder</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+</nav>
+
+
+
+<!-- When user clicks on "Home" from navigation bar, he will be redirected to following section -->
+<section id="home-section">
+    <div class="section-content">
+        <div class="container">
+              <h1 style="text-align:center; color:#4885ED;font-weight: bold" class="mb-3">Hospital Finder</h1> 
+              <h4 style="text-align:center;" class="mb-3"><em>Correlation between diseases caused and neighboring hospitals</em></h4>
+
+                <div style="text-align:justify"> <p>The project aims to find the top five leading causes of death and once we find it, we address one of leading causes of death and suggest hospitals near to a user for that particular disease so that they can be cured if possible and we can reduce the death rate for that particular disease. For this purpose, data about "Potentially Excess Deaths from the  Five Leading Causes of Death(NCHS)" from National Vital Statistics System is used and combined with the "Timely and Effective Care- Hospital" and "500 Cities: Local Data for Better Health" for the year 2014. </p></div>
+        </div>
+ 
+
+<!-- When user clicks on "Datasets" from navigation bar, he will be redirected to following section -->
+        <div class="container mb-5">
+            <h1 style="text-align:center;color:#4885ED" class="mb-1">Datasets </h2>
+            <br>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card-group">
+
+                        <!-- Card for Hospital Dataset -->
+                        <div class="card text-center ">
+                          <div class="card-block mt-3">
+                            <h4 class="card-title">Hospital Dataset</h4>
+                            <h6 class="card-subtitle mb-3"><em>Timely and Effective Care- Hospital</em></h6>
+                          </div>
+                          
+                          <div class="card-block mb-3">
+                            <p class="card-text text-justify ml-3 mr-3">This data set includes provider-level data for measures of heart attack care, heart failure care, pneumonia care, surgical care, emergency department care, preventive care, children asthma care, blood clot prevention and treatment, pregnancy and delivery care, and cancer care</p>
+                            <a class="btn btn-success" href="https://catalog.data.gov/dataset/timely-and-effective-care-hospital-e4aad">Learn more</a>
+                         </div>
+                        </div>
+                        
+                        <!-- Card for NCHS Dataset -->
+                        <div class="card text-center">
+                                <div class="card-block mt-3">
+                                  <h4 class="card-title">NCHS Dataset</h4>
+                                  <h6 class="card-subtitle mb-3"><em>Potentially Excess Deaths from the Five Leading Causes of Death</em></h6>
+                                </div>
+                                
+                                <div class="card-block mb-3">
+                                  <p class="card-text text-justify ml-3 mr-3" >This dataset contains Potentially Excess Deaths from the Five Leading Causes of Death in Nonmetropolitan and Metropolitan Areas, United States, 2005-2015. Mortality data for U.S. residents come from the National Vital Statistics System</p>
+                                  <a class="btn btn-success" href="https://catalog.data.gov/dataset/nchs-potentially-excess-deaths-from-the-five-leading-causes-of-death">Learn more</a>
+                               </div>
+                        </div>
+                         <!-- Card for 500 Cities Dataset -->
+                         <div class="card text-center">
+                                <div class="card-block mt-3">
+                                  <h4 class="card-title">500 Cities Dataset</h4>
+                                  <h6 class="card-subtitle mb-3"><em>500 Cities: Local Data for Better Health</em></h6>
+                                </div>
+                                
+                                <div class="card-block mb-3">
+                                  <p class="card-text text-justify ml-3 mr-3">This is the complete dataset for the 500 Cities project. It includes estimates related to unhealthy behaviors, health outcomes and use of preventive services, which can be used to identify emerging health problems and to 
+inform development and implementation of effective, targeted public health prevention activities.</p>
+                                  <a class="btn btn-success" href="https://catalog.data.gov/dataset/500-cities-local-data-for-better-health-b32fd">Learn more</a>
+                               </div>
+                        </div>
+                        
+          
+                        
+          
+          
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+    <!-- Footer section -->
+    <section id="footer-main" class="bg-dark">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <h6>Team Members</h6>
+              <p>Ankita Patil, Krupali Patel, Shivdev Kumar</p>
+            </div>
+            
+            <div class="col-md-6">
+                <h6>Semantic Web Project</h6>
+                <p>Spring 2018</p>
+                <p>The University of Texas at Dallas</p>
+            </div>
+          </div>
+        </div>
+    </section>
+
+      
+
+
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+</body>
+</html>
