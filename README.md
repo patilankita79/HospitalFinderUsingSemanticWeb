@@ -1,6 +1,10 @@
 # Hospital Finder Using Semantic Web Technologies
 
-Final project for the course - CS 6315: Semantic Web, Spring 2018<br>
+Final project for the course - CS 6315: Semantic Web, Spring 2018 
+<br>
+<blockquote>Correlation between leading causes of death and neighboring hospitals using Semantic Web technologies</blockquote>
+
+
 **Team members**
 - Ankita Patil
 - Krupali Patel
