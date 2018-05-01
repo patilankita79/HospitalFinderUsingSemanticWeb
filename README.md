@@ -52,6 +52,7 @@ The project aims to find the top five leading causes of death and once we find i
 - Apache Fuseki 3.6 (SPARQL server) to load the data and create SPARQL endpoints
 - Bootstrap 4 and JavaScript for front-end
 - Google Visulaization API
+- Google Maps API
 - csv2rdf4lod-automation tool for converting the data from CSV to RDF format
 <br>
 
