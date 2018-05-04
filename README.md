@@ -19,6 +19,11 @@ Final project for the course - CS 6315: Semantic Web, Spring 2018
 
 The project aims to find the top five leading causes of death and once we find it, we address one of leading causes of death and suggest hospitals near to a user for that particular disease so that they can be cured if possible and we can reduce the death rate for that particular disease. For this purpose, data about "Potentially Excess Deaths from the Five Leading Causes of Death(NCHS)" from National Vital Statistics System is used and combined with the "Timely and Effective Care- Hospital" and "500 Cities: Local Data for Better Health" for the year 2014.
 <br>
+## Target Audience
+
+1.	The general population of the United States: To locate nearby specialized hospitals based on their location within a particular radius, so that they can get respective treatments in the quickest possible way.
+2.	Government officials: to address the mismatch between the excessive count of deaths and scarcity of hospital for a state.
+
 ## Datasets
 
 1. **Timely and Effective Care – Hospital**<br>
@@ -50,10 +55,11 @@ The project aims to find the top five leading causes of death and once we find i
 ## Technology Stack
 
 - Apache Fuseki 3.6 (SPARQL server) to load the data and create SPARQL endpoints
+- csv2rdf4lod-automation tool for converting the data from CSV to RDF format
 - Bootstrap 4 and JavaScript for front-end
 - Google Visulaization API
 - Google Maps API
-- csv2rdf4lod-automation tool for converting the data from CSV to RDF format
+
 <br>
 
 ## Instructions to run the code
